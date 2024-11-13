@@ -1,0 +1,465 @@
+Prática para prova 02 de AED2
+
+1- Considere uma estrutura Lista de Pilhas. Crie o método CelulaLista maiorPilha () na classe Lista, que retorna a célula da Lista que aponta para a pilha com o maior número de elementos. Caso tenham pilhas do mesmo tamanho, retornar a primeira que aparece.
+//código dado pela questão
+class CelulaLista{
+	CelulaPilha topo;
+	CelulaLista prox;
+}
+
+class CelulaPilha{
+	int elemento;
+	CelulaPilha prox;
+}
+
+class Lista{
+	CelulaLista inicio;
+	CelulaLista fim;
+}
+
+//MINHA RESPOSTA
+//retorna a quantidade de células na LISTA... fiz mas acho que nem vai precisar usar
+int getTam (){
+
+	int tam = 0;
+	
+	//considerando que nao tem célula cabeça e que a célula apontada por "início" é válida
+	for (CelulaLista i = inicio; i != null; i = i.prox){
+		tam ++;
+	}
+}
+
+CelulaLista maiorPilha(){
+
+	CelulaLista i = inicio;
+	CelulaLista maiorCelula;
+	int contador = 0;
+	int maiorQtd = -1;
+	
+	while (i != null){
+	
+		contador = 0;
+		
+		if (i.topo != null){
+			
+			for (CelulaPilha j = i.topo; j != null; j = j.prox){
+				contador++;
+			}
+			
+		}
+		
+		if (contador > maiorQtd){
+		
+			maiorQtd = contador;
+			maiorCelula = i;
+			
+		}
+
+		i = i.prox;
+	}
+	
+	return maiorCelula;
+}
+
+--------------------------------------------------------------------------------------
+
+2- Na árvore de árvore, implemente o método int contarPalavras(String padrao) em Java que recebe uma String e retorna o número de palavras que começam com a mesma letra e possuem a mesma quantidade de caracteres. 
+//código dado pela questão
+class ArvoreArvore{
+	No raiz;
+}
+
+class No{
+	char letra;
+	No esq, dir;
+	No2 raiz;
+}
+
+class No2{
+	String palavra;
+	No2 esq, dir;
+}
+
+//MINHA RESPOSTA
+int contarPalavras (String padrao){
+
+	char letraProcurada = padrao.charAt(0);
+	int tam = padrao.length();
+	No noDaLetra = encontrarNoLetra (raiz, letraProcurada);
+	int resp = contarPalavras (noDaLetra.raiz, tam);
+	return resp;
+}
+	
+	
+//caminhar na arvore até achar o nó que contém a letra desejada
+No encontrarNoLetra (No i, char letraProcurada){
+
+	if (i == null){
+	
+		System.out.println("ERRO. A letra procurada nao existe na arvore");
+		return null;
+		
+	}else if (i.letra == letraProcurada){
+	
+		return i;
+	
+	}else if (letraProcurada < i.letra){
+	
+		return encontrarNoLetra(i.esq);
+		
+	}else if (letraProcurada > i.letra){
+	
+		return encontrarNoLetra(i.dir);
+	}
+}
+
+//caminhar central na sub-árvore que começa no nó da letra e contar quantas palavras tem o mesmo tamanho
+//temos que passar noDaLetra.raiz, padrao.length e 0 como parâmetros iniciais
+int contarPalavras (No2 x, int tam){
+
+	if (x == null){
+	
+		return 0;
+		
+	} else {
+	
+		int qtdPalavras = 0;
+		
+		if (x.palavra.length() == tam){
+		
+			qtdPalavras = 1;
+			
+		}
+		
+		return qtdPalavras + contarPalavras (x.esq, tam) + contarPalavras (x.dir, tam);
+	}
+}
+
+--------------------------------------------------------------------------------------
+
+3- Implemente o método public static int[] vetorOrdenado(int[] vetA, int[] vetB) em Java que recebe doi arrays de inteiros (tamanhos m e n) e retorna um terceiro array (tamanho n + m). O primeirro array (vetA) possui elementos pares, não primos, ordenados de forma decrescente. O segundo array (vetB) possui elementos ímpares, não primos, ordenados de forma decrescente. O array que será retornado deve possuir os valores dos dois arrays ordenados de forma CRESCENTE. A complexidade do método deve ser O (m + n).
+
+//MINHA RESPOSTA
+//seguindo o princípio do mergesort, podemos formar um grande array ordenado unindo dois arrays ordenados. para não precisar ordenar os vetores em ordem crescente, vamos percorrê-los de trás para frente
+//nao precisa de caso de os elementos serem iguais porque um array tem impares e o outro pares
+public static int[] vetorOrdenado(int[] vetA, int[] vetB){
+
+	int[] resp = new int [m+n];
+	
+	int indexA = m-1;
+	int indexB = n-1;
+	int posFinal = 0;
+	
+	while (indexA >= 0 && indexB >= 0){
+	
+		if (vetA[indexA] <= vetB[indexB]){
+		
+			resp[posFinal] = vetA[indexA];
+			indexA--;
+			
+		}else if (vetB[indexB] <= vetA[indexA]){
+		
+			resp[posFinal] = vetB[indexB];
+			indexB--;
+			
+		}
+		
+		posFinal++;
+	}
+
+	//copiar quaisquer elementos que estejam faltando
+	while (indexA >= 0){
+		
+		resp[posFinal] = vetA[indexA];
+		indexA--;
+		posFinal++;
+	
+	}
+	
+	while (indexB >= 0){
+		
+		resp[posFinal] = vetB[indexB];
+		indexB--;
+		posFinal++;
+		
+	}
+	
+	return resp;
+}
+
+--------------------------------------------------------------------------------------
+
+4- Na árvore de árvore, implemente o método int contarPalavras(char primeiro, char ultimo) em Java que recebe dois caracteres e retorna o número de palavras que começam com o caractere primeiro e terminam com o caractere último.
+//código dado pela questão
+class ArvoreArvore{
+	No raiz;
+}
+
+class No{
+	char letra;
+	No esq, dir;
+	No2 raiz;
+}
+
+class No2{
+	String palavra;
+	No2 esq, dir;
+}
+
+//MINHA RESPOSTA
+//primeiro preciso percorrer a super-arvore até chegar no nó que tem a letra desejada
+//dentro da classe ArvoreArvore
+int contarPalavras (char primeiro, char ultimo){
+	No noDaLetra = acharNoLetra(raiz, primeiro);
+	if(noDaLetra != null){
+		int resp = contarUltimaLetra(noDaLetra.raiz, ultimo);
+		return resp;
+	}else{
+		return -1;
+	}
+}
+
+No acharNoLetra (No i, char letraProcurada){
+
+	if (i == null){
+		System.out.println("ERRO. A primeira letra nao existe na arvore");
+		return null;
+	}else if (i.letra == letraProcurada){
+		return i;
+	}else if (i.letra > letraProcurada){
+		return acharNoLetra(i.esq, letraProcurada);
+	}else if (i.letra < letraProcurada){
+		return acharNoLetra(i.dir, letraProcurada);
+	}
+}
+	
+//passar a raiz da sub-árvore como parametro inicial
+int contarUltimaLetra (No2 atual, char letraProcurada){
+	
+	if (atual == null){
+	
+		return 0;
+		
+	}else{
+		
+		int count = 0;
+		
+		if(atual.palavra.charAt(atual.palavra.length()-1) == letraProcurada){
+			count = 1;
+		}
+		
+		return count + contarUltimaLetra(atual.esq, letraProcurada) + contarUltimaLetra(atual.dir, letraProcurada);
+	}
+}
+
+--------------------------------------------------------------------------------------
+
+5- Dado o código abaixo, faça a função Celula* encontrarRepetidos(No* raiz, CelulaMatriz* inicio) em C que recebe o endereço do nó raiz de uma árvore binária e o endereço da primeira célula de uma matriz flexível. Ele retorna o endereço do nó cabeça de uma lista simples ordenada DEcrescente contendo todos os números que existem tanto na árvore como na matriz flexível. A célula da lista, o nó da árvore e a célula matriz possuem apenas um elemento inteiro e os devidos ponteiros dessas estruturas. Sabe-se que a árvore não tem elementos repetidos dentro dela. A matriz também não.
+//código dado pela questão
+typedef Struct{
+	int numero;
+	Celula* prox;
+}Celula;
+
+typedef Struct{
+	int numero;
+	CelulaMatriz* prox;
+	CelulaMatriz* ant;
+	CelulaMatriz* sup;
+	CelulaMatriz* inf;
+}CelulaMatriz;
+
+typedef Struct{
+	int numero;
+	No *esq, *dir;
+}No;
+
+//MINHA RESPOSTA
+Celula* encontrarRepetidos (No* raiz, CelulaMatriz* inicio){
+	
+	//assumindo que a classe arvore tem uma variavel que guarda quantos elementos ela tem
+	int* tree = (int*)malloc(tamArvore*sizeOf(int));
+	tree = vetorAuxiliarArvore(raiz, 0, tree);
+	int* matrix = vetorAuxiliarMatriz(inicio);
+	
+	int* arvoreOrdenada = selectionDecrescente(tree);
+	int* matrizOrdenada = selectionDecrescente(matrix);
+	
+	int indexTree = 0;
+	int indexMatrix = 0;
+	
+	myList* listaSimples = createLista();
+	
+	while (indexTree < tamArvore && indexMatrix < tamMatriz){
+		if (arvoreOrdenada[indexTree] == matrizOrdenada[indexMatrix]){
+			inserirLista(arvoreOrdenada[indexTree], listaSimples);
+			indexTree++;
+			indexMatrix++;
+		} else if (arvoreOrdenada[indexTree] > matrizOrdenada[indexMatrix]){
+			indexTree++;
+		} else {
+			indexMatrix++;
+		}
+	}
+
+	return listaSimples->head;
+}
+
+//passar raiz, zero e um vetor de inteiro com capacidade para toda a arvore
+int vetorAuxiliarArvore(No* i, int pos, int* vetor){
+    if(i != NULL){
+        vetor[pos] = i->numero;
+        pos++;
+        pos = vetorAuxiliarArvore(i->esq, pos, vetor);
+        pos = vetorAuxiliarArvore(i->dir, pos, vetor);
+    }
+    return pos;
+}
+
+
+int vetorAuxiliarMatriz(CelulaMatriz* inicio, int pos, int* vetor){
+    CelulaMatriz* linha = inicio;
+    while (linha != NULL){
+        CelulaMatriz* ptr = linha;
+        while (ptr != NULL){
+            vetor[pos] = ptr->numero;
+            pos++;
+            ptr = ptr->prox; // Correção: usar 'prox' para mover na linha
+        }
+        linha = linha->inf; // Mover para a próxima linha
+    }
+    return pos;
+}
+
+
+void selectionDecrescente(int* vetor, int n){
+    for (int i = 0; i < n - 1; i++){
+        int maior = i;
+        for (int j = i + 1; j < n; j++){
+            if (vetor[j] > vetor[maior]){
+                maior = j;
+            }
+        }
+        int temp = vetor[i];
+        vetor[i] = vetor[maior];
+        vetor[maior] = temp;
+    }
+}
+
+		
+typedef Struct{
+
+	Celula* head;
+	Celula* ultimo;
+	
+}myList;
+
+myList* createLista(){
+    myList* lista = (myList*)malloc(sizeof(myList));
+    lista->head = NULL;
+    lista->ultimo = NULL;
+    return lista;
+}
+
+	
+void inserirLista(int a, myList* lista){
+    Celula* novaCelula = (Celula*)malloc(sizeof(Celula));
+    novaCelula->numero = a;
+    novaCelula->prox = NULL;
+    if (lista->head == NULL){
+        lista->head = novaCelula;
+        lista->ultimo = novaCelula;
+    } else {
+        lista->ultimo->prox = novaCelula;
+        lista->ultimo = novaCelula;
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+6- Seja a matriz de listas em Java apresentada abaixo, faça um método que remove todos os números ímpares existentes nas listas.
+//código dado pela questão
+class Matriz{
+	CelulaMat inicio;
+}
+class CelulaMat[
+	CelulaMat dir, esq, sup, inf;
+	Celula primeiro, ultimo;
+	public CelulaMat(){
+		dir = esq = sup = inf = null;
+		primeiro = ultimo = new Celula();
+	}
+}
+class Celula{
+	int numero;
+	Celula prox;
+	public Celula(){ this.Celula(0);}
+	public Celula(int elemento){
+		this.numero = elemento;
+		prox = null;
+	}
+}
+
+//MINHA RESPOSTA
+
+//funcao para percorrer matriz
+void removerImpares(){
+	
+	CelulaMat linha = inicio;
+	CelulaMat ptr = linha;
+	
+	while (linha != null){
+	
+		while (ptr != null){
+			
+			if (ptr.primeiro != null){
+				
+				for (Celula i = ptr.primeiro; i!=null; i = i.prox){
+					if(i.elemento % 2 != 0){
+						removeCell(i, ptr.primeiro);
+					}
+				}
+			}
+			
+			ptr = ptr.dir;
+		}
+		
+		linha = linha.inf;
+		ptr = linha;
+	}
+	
+}
+
+
+//função para remover célula de lista
+void removeCell (Celula c, Celula primeiro){
+
+	if(primeiro === ultimo){
+	
+		System.out.println("erro. lista vazia");
+
+	} else if (c == primeiro.prox){
+	
+		ultimo = primeiro;
+		primeiro.prox == null;
+		
+	}else{
+	
+		//quero parar uma célula antes daquela que desejo remover
+		for (Celula i = primeiro.prox; i.prox != c; i = i.prox);
+		
+		i.prox = c.prox;
+		
+		if(primeiro.prox == null)
+			ultimo = primeiro;
+		}
+		
+		c.prox = null;
+		c = null;
+	}
+
+}
+
+--------------------------------------------------------------------------------------
+
+7- 
